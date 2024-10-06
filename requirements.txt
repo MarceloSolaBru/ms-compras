@@ -1,0 +1,8 @@
+Flask==3.0.3
+Flask-SQLAlchemy==3.0.5
+SQLAlchemy==2.0.20
+Flask-Migrate==4.0.4
+python-dotenv==1.0.1
+pytest
+psycopg2==2.9.9
+psycopg[binary]
