@@ -18,7 +18,7 @@ class ConnectionTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def test_db_connection(self):
-        result = db.session.query(text("Hello world")).one()
+        result = db.session.execute(text("SELECT 'Hello world'")).one()
         self.assertEqual(result[0], "Hello world")
 
 

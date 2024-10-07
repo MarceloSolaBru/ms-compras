@@ -1,16 +1,21 @@
-version: '3.8'
-
 services:
-  db:
-    image: postgres:latest
+  postgresql:
+    container_name: postgresql
+    image: postgres:15.4-bullseye
+    restart: always
+
     environment:
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: contrasena
-      POSTGRES_DB: bdcompras
+      POSTGRES_PASSWORD: marce
+      POSTGRES_DB: db_compras
+      POSTGRES_USER: marce
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
-volumes:
-  postgres_data:
+    volumes:
+      # es buena practica path relativo desde el proyecto ./_data:/var/lib/postgresql
+      - ./_data:/var/lib/postgresql/data
+
+networks:
+  mired:
+    driver: bridge
