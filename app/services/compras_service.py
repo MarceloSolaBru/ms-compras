@@ -4,11 +4,10 @@ import logging
 
 class ComprasService:
 
-    def procesar_pago(self, producto_id, monto, direccion_envio):
-        url_pago = "http://localhost:5000/procesar_pago"
+    def procesar_pago(self, producto_id, direccion_envio):
+        url_pago = "http://localhost:5000/procesar_pago"  # Considera mover esto a una configuración
         datos_pago = {
             "producto_id": producto_id,
-            "monto": monto,
             "direccion_envio": direccion_envio,
         }
 
@@ -16,11 +15,7 @@ class ComprasService:
             respuesta = requests.post(url_pago, json=datos_pago)
 
             if respuesta.status_code == 200:
-                try:
-                    return respuesta.json()  
-                except ValueError:
-                    logging.error("La respuesta no es un JSON válido")
-                    return None
+                return respuesta.json()
             else:
                 logging.error(f"Error al procesar el pago: {respuesta.status_code} - {respuesta.text}")
                 return None
@@ -30,14 +25,18 @@ class ComprasService:
 
     def guardar_compra(self, producto_id, direccion_envio):
         try:
-            compra = Compras.crear_compra(producto_id, direccion_envio)
-            return compra
+            return Compras.crear_compra(producto_id, direccion_envio)
         except Exception as e:
             logging.error(f"Error al guardar la compra: {str(e)}")
             return None
 
-    def compra(self, producto_id, direccion_envio, monto):
-        pago = self.procesar_pago(producto_id, monto, direccion_envio)
+    def compra(self, producto_id, direccion_envio):
+        # Validaciones
+        if not isinstance(producto_id, int) or not isinstance(direccion_envio, str):
+            logging.error("Datos inválidos para el pago")
+            return None
+
+        pago = self.procesar_pago(producto_id, direccion_envio)
         if pago:
             return self.guardar_compra(producto_id, direccion_envio)
         else:

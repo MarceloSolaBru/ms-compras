@@ -15,7 +15,7 @@ class TestComprasService(unittest.TestCase):
         mock_respuesta.json.return_value = {"status": "success"}
         mock_post.return_value = mock_respuesta
 
-        resultado = self.compras_service.procesar_pago(1, 100, "Calle Falsa 123")
+        resultado = self.compras_service.procesar_pago(1, "Calle Falsa 123")
 
         self.assertIsNotNone(resultado)
         self.assertEqual(resultado["status"], "success")
@@ -27,7 +27,7 @@ class TestComprasService(unittest.TestCase):
         mock_respuesta.text = "Error al procesar el pago"
         mock_post.return_value = mock_respuesta
 
-        resultado = self.compras_service.procesar_pago(1, 100, "Calle Falsa 123")
+        resultado = self.compras_service.procesar_pago(1, "Calle Falsa 123")
 
         self.assertIsNone(resultado)
 
@@ -35,7 +35,7 @@ class TestComprasService(unittest.TestCase):
     def test_procesar_pago_error_conexion(self, mock_post):
         mock_post.side_effect = requests.exceptions.RequestException("Error de conexión")
 
-        resultado = self.compras_service.procesar_pago(1, 100, "Calle Falsa 123")
+        resultado = self.compras_service.procesar_pago(1, "Calle Falsa 123")
 
         self.assertIsNone(resultado)
 
@@ -67,7 +67,7 @@ class TestComprasService(unittest.TestCase):
         mock_compra = Compras(producto_id=1, direccion_envio="Calle Falsa 123")
         mock_crear_compra.return_value = mock_compra
 
-        resultado = self.compras_service.compra(1, "Calle Falsa 123", 100)
+        resultado = self.compras_service.compra(1, "Calle Falsa 123")
 
         self.assertIsNotNone(resultado)
         self.assertEqual(resultado.producto_id, 1)
@@ -77,7 +77,7 @@ class TestComprasService(unittest.TestCase):
     def test_compra_fallo_pago(self, mock_post):
         mock_post.return_value.status_code = 400
 
-        resultado = self.compras_service.compra(1, "Calle Falsa 123", 100)
+        resultado = self.compras_service.compra(1, "Calle Falsa 123")
 
         self.assertIsNone(resultado)
 
@@ -85,7 +85,7 @@ class TestComprasService(unittest.TestCase):
     def test_compra_error_conexion(self, mock_post):
         mock_post.side_effect = requests.exceptions.RequestException("Error de conexión")
 
-        resultado = self.compras_service.compra(1, "Calle Falsa 123", 100)
+        resultado = self.compras_service.compra(1, "Calle Falsa 123")
 
         self.assertIsNone(resultado)
 

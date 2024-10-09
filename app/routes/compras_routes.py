@@ -3,7 +3,6 @@ from app.models.compras import Compras
 from app import db
 from datetime import datetime
 
-# Definir el Blueprint para compras
 compras_bp = Blueprint('compras', __name__)
 
 @compras_bp.route('/', methods=['POST'])
@@ -13,7 +12,6 @@ def create_compra():
     if not data or not 'producto_id' in data or not 'direccion_envio' in data:
         return jsonify({'error': 'Datos inválidos'}), 400
     
-    # Procesar compra
     compra = Compras.crear_compra(data['producto_id'], data['direccion_envio'])
     
     if compra is None:
