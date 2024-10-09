@@ -7,17 +7,15 @@ from datetime import datetime
 class TestComprasRoutes(unittest.TestCase):
 
     def setUp(self):
-        # Crear la aplicación de prueba
-        self.app = create_app()  # Asume que tienes una configuración 'testing'
+        self.app = create_app()  
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
 
-        # Crear las tablas de la base de datos
+
         db.create_all()
 
     def tearDown(self):
-        # Eliminar las tablas de la base de datos y cerrar el contexto
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
