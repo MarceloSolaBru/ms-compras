@@ -6,6 +6,7 @@ from app.config import config
 # Inicializar la base de datos
 db = SQLAlchemy()
 
+
 def create_app() -> Flask:
     app_context = os.getenv("FLASK_CONTEXT")
     app = Flask(__name__)
@@ -15,6 +16,10 @@ def create_app() -> Flask:
     db.init_app(app)
 
     from app.routes.compras_routes import compras_bp
-    app.register_blueprint(compras_bp, url_prefix='/compras')
+
+    app.register_blueprint(compras_bp, url_prefix="/compras")
+
+    with app.app_context():
+        db.create_all()
 
     return app
