@@ -26,10 +26,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {"options": "-csearch_path=compras_schema"}
     }
-    CACHE_REDIS_HOST = os.environ.get('REDIS_HOST')
-    CACHE_REDIS_PORT = os.environ.get('REDIS_PORT')
-    CACHE_REDIS_DB = os.environ.get('REDIS_DB')
-    CACHE_REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
+    CACHE_REDIS_URL = os.getenv('REDIS_URL')
 
 class TestConfig(Config):
     TESTING = True
@@ -39,10 +36,7 @@ class TestConfig(Config):
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {"options": "-csearch_path=compras_schema"}
     }
-    CACHE_REDIS_HOST = os.environ.get('REDIS_HOST')
-    CACHE_REDIS_PORT = os.environ.get('REDIS_PORT')
-    CACHE_REDIS_DB = os.environ.get('REDIS_DB')
-    CACHE_REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
+    CACHE_REDIS_URL = os.getenv('REDIS_URL')
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -53,7 +47,8 @@ class ProductionConfig(Config):
     SQLALCHEMY_ENGINE_OPTIONS = {
         "connect_args": {"options": "-csearch_path=compras_schema"}
     }
-
+    CACHE_REDIS_URL = os.getenv('REDIS_URL')
+    
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
