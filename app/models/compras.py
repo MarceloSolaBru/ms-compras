@@ -1,4 +1,4 @@
-from app import db
+from app import db, cache
 
 
 class Compras(db.Model):
@@ -14,11 +14,16 @@ class Compras(db.Model):
         nueva_compra = Compras(producto_id=producto_id, direccion_envio=direccion_envio)
         db.session.add(nueva_compra)
         db.session.commit()
+        cache.set(f'compra_{nueva_compra.id}', nueva_compra, timeout=10)
         return nueva_compra
 
     @staticmethod
     def obtener_compras():
-        return Compras.query.all()
+        result = cache.get("compras")
+        if result is None:
+            result = Compras.query.all()
+            cache.set("compras", result, timeout=10)
+        return result
 
     @staticmethod
     def obtener_compra_por_id(compra_id):
